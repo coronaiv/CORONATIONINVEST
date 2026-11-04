@@ -1,0 +1,129 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORONATIONINVEST | Access Gateway</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #1a365d; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .auth-card { background: white; width: 100%; max-width: 450px; padding: 30px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .logo-header { text-align: center; margin-bottom: 20px; color: #1a365d; font-weight: bold; font-size: 1.4rem; }
+        .toggle-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
+        .auth-tab { flex: 1; padding: 10px; border: none; background: none; font-weight: bold; color: #a0aec0; cursor: pointer; text-align: center; }
+        .auth-tab.active { color: #3182ce; border-bottom: 3px solid #3182ce; }
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
+        .input-block { margin-bottom: 15px; }
+        .input-block label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #4a5568; }
+        .input-block input { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 4px; }
+        .checkbox-block { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: #4a5568; margin-bottom: 15px; }
+        .checkbox-block input { margin-top: 3px; }
+        .submit-btn { width: 100%; background: #3182ce; color: white; padding: 12px; border: none; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .submit-btn:hover { background: #2b6cb0; }
+        .success-splash { display: none; background: #f0fff4; border: 1px solid #c6f6d5; padding: 20px; border-radius: 6px; text-align: center; }
+        .ref-link-box { background: #ebf8ff; border: 1px dashed #bee3f8; padding: 10px; font-family: monospace; font-size: 0.85rem; margin-top: 10px; word-break: break-all; }
+        .back-home { display: block; text-align: center; margin-top: 15px; font-size: 0.85rem; color: #3182ce; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="logo-header">👑 CORONATIONINVEST</div>
+        
+        <div class="toggle-tabs">
+            <button class="auth-tab active" id="tabReg" onclick="setMode('register')">Register Account</button>
+            <button class="auth-tab" id="tabLog" onclick="setMode('login')">Login</button>
+        </div>
+
+        <!-- Registration Portal Form Panel -->
+        <div id="panelRegister" class="form-panel active">
+            <div class="input-block"><label>Full Legal Name</label><input type="text" id="regName" placeholder="John Doe"></div>
+            <div class="input-block"><label>Username</label><input type="text" id="regUser" placeholder="johndoe123"></div>
+            <div class="input-block"><label>Email Address</label><input type="email" id="regEmail" placeholder="name@domain.com"></div>
+            <div class="input-block"><label>Phone Number (Optional)</label><input type="text" id="regPhone" placeholder="+123456789"></div>
+            <div class="input-block"><label>Password</label><input type="password" id="regPass" placeholder="••••••••"></div>
+            <div class="checkbox-block">
+                <input type="checkbox" id="regTerms">
+                <label for="regTerms">I explicitly accept the Terms of Service, anti-money laundering (AML) regulatory compliance framework, and confirm I am 18 years of age or older.</label>
+            </div>
+            <button class="submit-btn" onclick="executeRegistration()">Sign Up & Initialize Profile</button>
+        </div>
+
+        <!-- Login Portal Form Panel -->
+        <div id="panelLogin" class="form-panel">
+            <div class="input-block"><label>Username / Email</label><input type="text" placeholder="Enter username"></div>
+            <div class="input-block"><label>Password</label><input type="password" placeholder="••••••••"></div>
+            <button class="submit-btn" onclick="alert('Authentication complete. Connecting interface to portfolio variables...')">Log In</button>
+        </div>
+
+        <!-- Client-Side Registration Onboarding Success Splash Interface -->
+        <div id="panelSuccess" class="success-splash">
+            <h3 style="color:#22543d; margin-bottom:10px;">Registration Complete!</h3>
+            <p style="font-size:0.9rem; color:#2f855a; margin-bottom:15px;">A simulated profile confirmation summary payload has been prepared for dispatch to your email.</p>
+            
+            <div style="text-align:left; font-size:0.85rem; background:white; padding:12px; border:1px solid #cbd5e0; border-radius:4px; margin-bottom:15px;">
+                <strong>Profile Metadata:</strong><br>
+                • User: <span id="lblUser"></span><br>
+                • Pass: <span id="lblPass"></span><br>
+                • Target: <span id="lblEmail"></span>
+            </div>
+
+            <strong>Generated Affiliate Tracking Link:</strong>
+            <div class="ref-link-box" id="refLinkText">https://coronationinvest.com</div>
+            <button class="btn btn-log" style="width:100%; margin-top:15px;" onclick="location.reload()">Return to Access Gateway</button>
+        </div>
+
+        <a href="index.html" class="back-home">← Back to Main Public Interface</a>
+    </div>
+
+    <script>
+        // Check URL parameters to launch the form tab automatically if selected from home
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        if (mode === 'login') { setMode('login'); }
+
+        function setMode(targetMode) {
+            document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('panelSuccess').style.display = 'none';
+
+            if(targetMode === 'register') {
+                document.getElementById('panelRegister').classList.add('active');
+                document.getElementById('tabReg').classList.add('active');
+            } else {
+                document.getElementById('panelLogin').classList.add('active');
+                document.getElementById('tabLog').classList.add('active');
+            }
+        }
+
+        function executeRegistration() {
+            const name = document.getElementById('regName').value;
+            const username = document.getElementById('regUser').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            const terms = document.getElementById('regTerms').checked;
+
+            if(!name || !username || !email || !pass) {
+                alert('Please populate all required credentials.');
+                return;
+            }
+            if(!terms) {
+                alert('You must review and accept the terms and conditions.');
+                return;
+            }
+
+            // Populate metadata layout structures on dashboard interface
+            document.getElementById('lblUser').innerText = username;
+            document.getElementById('lblPass').innerText = pass;
+            document.getElementById('lblEmail').innerText = email;
+            document.getElementById('refLinkText').innerText = `https://github.io{username}`;
+
+            // Switch to successful registration payload mockup window view
+            document.getElementById('panelRegister').classList.remove('active');
+            document.getElementById('panelSuccess').style.display = 'block';
+        }
+    </script>
+</body>
+  </html>
